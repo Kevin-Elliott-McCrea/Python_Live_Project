@@ -52,4 +52,5 @@ General skills learned:
 
 
 
-Languages used: Django, Python, CSS, and HTML to create a functioning website for saving and modifying recipes. 
+Languages used: Python, CSS, and HTML to create a functioning website for saving and modifying recipes.
+Framework: Django.
