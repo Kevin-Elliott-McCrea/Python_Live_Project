@@ -1,23 +1,16 @@
 # Django Web Application Code Base
 
-(going to add a intro here)
+I certaintly struggled a lot with this project, but especially so during the beginning phase. I talked to the instructors a lot to understand how to register filepaths in urls.py and the settings.py file. I also had a lot of trouble understanding how to use the model and model form to display that content on the template for the user to see. It was a huge difficulty, but I understood it well by the time I got to story 4 and it is now a tool under my belt. I also had a big difficulty with the template language, especially with how to use the tags: extends, includes, and the block tags. Once I figured that part out, the rest came with quite a bit more ease.
 
+Here are the stories, with the code I used for them:
 
-## Story 1 - Create Model, database and other connecting stuff??
+## Story 1 - Initialize Project. Make Base and Home Template.
 
-(going to add a good chunk here)
+First I started a new app with manage.py. Then I registered in the site settings.py file. From there, I created the base and home templates, along with the navbar and footer that would go into each template.
 
-Here I added my application to the settings.py file in the main part of the website code (what do I call this?)
+#### Base Template
 
-```python
-
-```
-
-## Story 2 - Make Base Page and Home Page
-
-#### Base Page View
-
-This is used as a template for postitioning html elements and importing libraries/frameworks in all webpages in my web app
+This is used as a template for postitioning html elements and importing libraries/frameworks in all webpages in my web app. I used Django template "include" tags to include this in each template file I have for the site.
 ```python
 {% load static %}
 <!DOCTYPE html>
@@ -59,35 +52,10 @@ This is used as a template for postitioning html elements and importing librarie
 </html>
 ```
 
-#### Home Page View
-
-Since I only have one line of css for the home page, I will just show the html and template language here
-```python
-
-{% extends "FoodRecipeApp/FoodRecipeApp_base.html" %}
-
-{% load static %}
-
-
-{% block title %}Recipes with Nutrition{% endblock %}
-
-
-{% block header %}
-
-<div><h2 class="header-txt">Discover new recipes and know if they're healthy!</h2></div>
-<div><h3 class="header-txt">- Click the navbar to explore!</h3></div>
-
-{% endblock %}
-```
-
-
-## Story 3 - Make Navbar and Footer
+#### Navbar Template
 
 Here I struggled to understand how to use template tags to set up links from the navbar to other pages in my app. After a good chunk of time, I figured it out with the help of the instructors and styled the navbar and footer. Then I used the "extends" template tag to allow the base.html page to inherit the footer and navbar. Since the base.html page is extended in each page of my site area, the navbar and footer is also in each one.
 
-#### Navbar Template
-
-I kept the navbar simple here, as I wasn't going to have a huge site to navigate through
 ```python
 {% load static %}
 
@@ -106,7 +74,7 @@ I kept the navbar simple here, as I wasn't going to have a huge site to navigate
 
 #### Navbar CSS
 
-Here I wanted the links to span the entire height of the navbar and be aligned on the left of the screen. I also added hover effects.
+Here I wanted the links to span the entire height of the navbar and be aligned on the left of the screen. I also added hover effects. I hadn't used CSS in a while, so I took a bit of time to brush up on it and then got rolling here.
 ```CSS
 .topnav {
   background-color: #333;
@@ -150,7 +118,7 @@ Here I wanted the links to span the entire height of the navbar and be aligned o
 
 #### Footer Template
 
-Added to round out the site formatting.
+This was added to round out the site formatting.
 ```python
 {% load static %}
 
@@ -186,14 +154,108 @@ body {
 }
 ```
 
+#### Home Template
 
-## Story 4 - Make Create, Edit Page and Delete Page
+Since I only have one line of css for the home page, I will just show the html and template language here
 
-After styling the create page, I realized that I can reuse the code for the edit and delete pages as well, while keeping the style looking good. This adds to the efficiency of the program and is quicker to code as well.
+```python
 
-#### Create Page View
+{% extends "FoodRecipeApp/FoodRecipeApp_base.html" %}
 
-Created with easy UI for user to add their own recipe. All fields must be filled out or you will get an error upon submitting.
+{% load static %}
+
+
+{% block title %}Recipes with Nutrition{% endblock %}
+
+
+{% block header %}
+
+<div><h2 class="header-txt">Discover new recipes and know if they're healthy!</h2></div>
+<div><h3 class="header-txt">- Click the navbar to explore!</h3></div>
+
+{% endblock %}
+```
+
+#### Home View Function
+
+Then I added a function to the views for rendering the home page. After this, I registered my app's folder path and the home page to the website's urls.py file. 
+```python
+# Homepage
+def home(request):
+    # All we need is to render the template
+    return render(request, 'FoodRecipeApp/FoodRecipeApp_home.html')
+```
+
+## Story 2 - Create Model, Model Form, Database, and Create Page
+
+Here I set up the model functionality so that I could have the database items be rendered on to the user-facing template page in a form.
+
+#### Model
+
+For this I created the model and made the migration so that the database was set up.
+```python
+from django.db import models
+
+
+MEALTYPE = [
+    ("Appetizer", "Appetizer"),
+    ("Entree", "Entree"),
+    ("Side", "Side"),
+    ("Beverage", "Beverage"),
+    ("Dessert", "Dessert"),
+]
+
+
+# This is the model used for all saved data
+class RecipeTracker(models.Model):
+    title = models.CharField(max_length=60)
+    mealType = models.CharField(max_length=60, choices=MEALTYPE)
+    description = models.CharField(max_length=500)
+    ingredients = models.CharField(max_length=700)
+    nutritionTracked = models.CharField(max_length=500)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "My Recipes"
+        verbose_name_plural = "Recipe Info"
+
+    objects = models.Manager()
+```
+
+#### Form Based on Model
+
+This allows the form to be called with template tags to the html create page or edit page, respectively.
+```python
+from django import forms
+from .models import RecipeTracker
+
+
+# create a ModelForm
+class RecipeForm(forms.ModelForm):
+    # specify the name of model to use
+    class Meta:
+        model = RecipeTracker
+        fields = "__all__"
+
+
+# form to edit and individual recipe
+class EditRecipeForm(forms.ModelForm):
+    class Meta:
+        model = RecipeTracker
+        fields = {
+            'title',
+            'mealType',
+            'description',
+            'ingredients',
+            'nutritionTracked',
+        }
+```
+
+#### Make Create Template
+
+This was fairly simple. I just had to debug how to get the form to render on the page as my only issue here.
 ```python
 {% extends "FoodRecipeApp/FoodRecipeApp_base.html" %}
 {% load static %}
@@ -201,7 +263,7 @@ Created with easy UI for user to add their own recipe. All fields must be filled
 
 <!-- This is a basic create recipe page -->
 {% block content %}
-<div class="jumbotron jumbotron-crud-form">
+<div class="jumbotron jumbotron-create-page">
     <form action="" method="post">
         {% csrf_token %}
         <table>
@@ -213,9 +275,129 @@ Created with easy UI for user to add their own recipe. All fields must be filled
 {% endblock %}
 ```
 
-#### Edit Page View
+#### Create View
 
-This has the same formatting as the create page, but it adds a button that gives the option to delete a recipe.
+Once I created this view, it was the perfect time to test out the database and the form to see if it could work. I encountered some errors as I ran through it so I worked on debugging those for a while. I fixed some syntax errors on the template page and a wrong character in the urls.py file for the whole site and then I was on my way.
+```python
+# Create page
+def create(request):
+    context = {}
+    # create object of form
+    form = RecipeForm(request.POST or None)
+    # check if form data is valid
+    if form.is_valid():
+        # save the form data to model
+        form.save()
+        form = RecipeForm()
+    context['form'] = form
+    return render(request, 'FoodRecipeApp/FoodRecipeApp_create.html', context)
+```
+
+For my styling on the home page, I just aligned the text to the center. I went ahead to make sure it all worked and then boom, I was done with the story.
+
+
+## Story 3 - Make Index Page
+
+#### Index Template
+
+Most of the difficulty here came from figuring out the template tags needed to loop through the model and bring each recipe in as a form. I also had to make sure the form labels and fields corresponded with each other properly. Once I figured that out and registered the url pattern, I let the bootstrap do the rest of the work for styling. Lastly, I added a view function to render the index page and made sure that the button on the navbar properly linked to the index page.
+
+```python
+{% extends 'FoodRecipeApp/FoodRecipeApp_base.html' %}
+
+{% block content %}
+  <!-- The styling is mostly bootstrap. I renders details from the database using template tags for each recipe in boxes -->
+  <div class="manage-containers">
+    <div class="list-group">.
+      {% for recipe in recipe_list %}
+      <!-- The whole container is a link to the details of that individual recipe -->
+      <a href="recipeDetails/{{ recipe.id }}/" class="list-group-item list-group-item-action flex-column align-items-start manage-containers">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">Recipe name: {{ recipe.title }}</h5>
+        </div>
+        <p class="mb-1">Description: {{ recipe.description }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
+```
+
+#### Index CSS
+
+I keep this CSS very short, as I used bootstrap classes to good effect for styling.
+```CSS
+.manage-containers {
+ opacity: .92;
+ width: 55%;
+ margin: auto;
+}
+```
+
+#### Index View
+
+Here I pass all the database objects through the context variable in the url. 
+```python
+def show_recipes(request):
+    recipe = RecipeTracker.objects.all()
+    context = {
+        'recipe_list': recipe
+    }
+    return render(request, "FoodRecipeApp/FoodRecipeApp_showRecipes.html", context)
+```
+
+## Story 4 - Details Template
+
+I started by creating this template here to received a single id of a database object and render that through this template. Then I registered the url pattern.
+
+#### Details Template
+
+This gets passed the ID through the url from the index template. You will also see the CSS in story 5 that applies in the same way to this template as it does to the edit template.
+```python
+{% extends 'FoodRecipeApp/FoodRecipeApp_base.html' %}
+ 
+{% block content %}
+  <!-- This is mostly bootstrap that shows a single recipes details. It is called from the showRecipes page -->
+  <div class="manage-containers">
+    <div class="list-group">
+      <a href="#" class="list-group-item list-group-item-action flex-column align-items-start manage-containers-details">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">Recipe name: {{ recipe.title }}</h5>
+          <small>Type of meal: {{ recipe.mealType }}</small>
+        </div>
+        <p class="mb-1">Description: {{ recipe.description }}</p>
+        <p class="mb-1">Ingredients: {{ recipe.ingredients }}</p>
+        <small>Nutrition: {{ recipe.nutritionTracked }}</small>
+      </a>
+    </div>
+  </div>
+  <!-- Button takes you to the editRecipe page -->
+  <div class="button_container">
+    <a href="{% url 'FReditRecipe' recipe.id %}"><button type="button" class="btn btn-primary button_align">Edit Recipe</button></a>
+  </div>
+{% endblock %}
+```
+
+#### Details View
+
+Here I created the view and added a link in the index page in each image that calls this view and passes the ID. I had quite a bit of trouble figuring out how to get the exact id from the index page, so I spent quite a bit of time on that before solving it below.
+
+```python
+def recipe_details(request, pk):
+    recipe = RecipeTracker.objects.get(pk=pk)
+    context = {
+        'recipe': recipe
+    }
+    return render(request, "FoodRecipeApp/FoodRecipeApp_recipeDetails.html", context)
+```
+
+## Story 5 - Edit and Delete Templates
+
+After styling the create page earlier, I realized that I can reuse the code for the edit and delete pages as well, while keeping the style looking good. This adds to the efficiency of the program and is quicker to code as well.
+
+#### Edit Template
+
+This has the same formatting as the create page, but it adds a button that gives the option to delete a recipe. The only issue I ran into was getting the button to look good and stick just under the main form while being centered. I created this and registered the url as well. Once again the ID is passed through the url here.
 ```python
 {% extends "FoodRecipeApp/FoodRecipeApp_base.html" %}
 {% load static %}
@@ -241,7 +423,28 @@ This has the same formatting as the create page, but it adds a button that gives
 {% endblock %}
 ```
 
-#### Delete Page View
+#### Edit View
+
+Here I had to pull the current object from the database, check for validity of the form submitted, and redirect as well. This took me quite a bit of time to finish.
+```python
+def edit_recipe(request, pk):
+    recipe = get_object_or_404(RecipeTracker, pk=pk)
+    if request.method == "POST":
+        # instance is used to put the model data in the form as the page is rendered
+        form = EditRecipeForm(request.POST, instance=recipe)
+        if form.is_valid():
+            recipe.save()
+            return redirect('FReditRecipe', pk=recipe.pk)
+    else:
+        form = EditRecipeForm(instance=recipe)
+    context = {
+        'form': form,
+        'pk': pk
+    }
+    return render(request, 'FoodRecipeApp/FoodRecipeApp_editRecipe.html', context)
+```
+
+#### Delete Template
 
 This was added to make sure the user understands that they are deleting something, before they complete the process.
 ```python
@@ -266,9 +469,25 @@ This was added to make sure the user understands that they are deleting somethin
 {% endblock %}
 ```
 
-#### CSS For All Three Pages
+#### Delete View
 
-This is intentionally very economical. I used very little CSS but still got the job done. The home page uses only the jumbotron crud form selector, but the edit and delete pages also use the button container and button align css selectors.
+After finishing the edit view, this was pretty simple, since I mostly repeated steps I already had done.
+```python
+def delete_recipe(request, pk):
+    recipe = get_object_or_404(RecipeTracker, pk=pk)
+    if request.method == "POST":
+        # confirming delete
+        recipe.delete()
+        return redirect('FRshowRecipes')
+    context = {
+        'recipe': recipe
+    }
+    return render(request, 'FoodRecipeApp/FoodRecipeApp_deleteRecipe.html', context)
+```
+
+#### CSS For Both Pages
+
+This is intentionally very economical. I used very little CSS but still got the job done. The home page from earlier uses only the jumbotron crud form selector and a couple bootstrap classes, but the edit and delete pages also use the button container and button align css selectors, along with an additional bootstrap class.
 ```CSS
 .jumbotron-crud-form {
  width: 35%;
@@ -291,40 +510,4 @@ This is intentionally very economical. I used very little CSS but still got the 
 }
 ```
 
-## Story 5 - Make Index Page
-
-#### Index Page View
-
-Most of the difficulty here came from figuring out the template tags needed to loop through the model and bring each recipe in as a form. Once I figured that out, I let the bootstrap do the rest of the work for styling.
-```python
-{% extends 'FoodRecipeApp/FoodRecipeApp_base.html' %}
-
-{% block content %}
-  <!-- The styling is mostly bootstrap. I renders details from the database using template tags for each recipe in boxes -->
-  <div class="manage-containers">
-    <div class="list-group">.
-      {% for recipe in recipe_list %}
-      <!-- The whole container is a link to the details of that individual recipe -->
-      <a href="recipeDetails/{{ recipe.id }}/" class="list-group-item list-group-item-action flex-column align-items-start manage-containers">
-        <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-1">Recipe name: {{ recipe.title }}</h5>
-        </div>
-        <p class="mb-1">Description: {{ recipe.description }}</p>
-      </a>
-      {% endfor %}
-    </div>
-  </div>
-{% endblock %}
-```
-
-#### Index Page CSS
-
-I keep this CSS very short, as I used bootstrap classes to good effect for styling.
-```CSS
-.manage-containers {
- opacity: .92;
- width: 55%;
- margin: auto;
-}
-```
-
+Following the completion of these stories, I performed a very thorough testing of the entire app I created to make sure the functionality was as intended. I also cleaned up the comments and made sure that there wasn't any stray code lying around that was wasting space and time. And there it is! That is what I accomplished on my two-week sprint.
