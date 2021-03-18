@@ -11,7 +11,7 @@ Here I added my application to the settings.py file in the main part of the webs
 
 ## Story 2 - Make Base Page and Home Page
 
-#### Base Page
+#### Base Page View
 
 This is used as a template for postitioning html elements and importing libraries/frameworks in all webpages in my web app
 ```python
@@ -55,7 +55,7 @@ This is used as a template for postitioning html elements and importing librarie
 </html>
 ```
 
-#### Home Page
+#### Home Page View
 
 Since I only have one line of css for the home page, I will just show the html and template language here
 ```python
@@ -81,7 +81,7 @@ Since I only have one line of css for the home page, I will just show the html a
 
 Here I struggled to understand how to use template tags to set up links from the navbar to other pages in my app. After a good chunk of time, I figured it out with the help of the instructors and styled the navbar and footer. Then I used the "extends" template tag to allow the base.html page to inherit the footer and navbar. Since the base.html page is extended in each page of my site area, the navbar and footer is also in each one.
 
-#### Navbar
+#### Navbar Template
 
 I kept the navbar simple here, as I wasn't going to have a huge site to navigate through
 ```python
@@ -144,7 +144,7 @@ Here I wanted the links to span the entire height of the navbar and be aligned o
 ```
 
 
-#### Footer
+#### Footer Template
 
 Added to round out the site formatting.
 ```python
@@ -187,7 +187,7 @@ body {
 
 After styling the create page, I realized that I can reuse the code for the edit and delete pages as well, while keeping the style looking good. This adds to the efficiency of the program and is quicker to code as well.
 
-#### Create Page
+#### Create Page View
 
 Created with easy UI for user to add their own recipe. All fields must be filled out or you will get an error upon submitting.
 ```python
@@ -209,7 +209,7 @@ Created with easy UI for user to add their own recipe. All fields must be filled
 {% endblock %}
 ```
 
-#### Edit Page
+#### Edit Page View
 
 This has the same formatting as the create page, but it adds a button that gives the option to delete a recipe.
 ```python
@@ -237,7 +237,7 @@ This has the same formatting as the create page, but it adds a button that gives
 {% endblock %}
 ```
 
-#### Delete Page
+#### Delete Page View
 
 This was added to make sure the user understands that they are deleting something, before they complete the process.
 ```python
