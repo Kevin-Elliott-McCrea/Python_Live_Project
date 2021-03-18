@@ -186,7 +186,7 @@ def home(request):
     return render(request, 'FoodRecipeApp/FoodRecipeApp_home.html')
 ```
 
-## Story 2 - Create Model, Model Form, Database, and Create Page
+## Story 2 - Create Model, Model Form, Database, and Create Template
 
 Here I set up the model functionality so that I could have the database items be rendered on to the user-facing template page in a form.
 
@@ -296,7 +296,7 @@ def create(request):
 For my styling on the home page, I just aligned the text to the center. I went ahead to make sure it all worked and then boom, I was done with the story.
 
 
-## Story 3 - Make Index Page
+## Story 3 - Make Index Template
 
 #### Index Template
 
