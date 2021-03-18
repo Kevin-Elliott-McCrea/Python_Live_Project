@@ -1,7 +1,11 @@
 # Django Web Application Code Base
 
+(going to add a intro here)
+
 
 ## Story 1 - Create Model, database and other connecting stuff??
+
+(going to add a good chunk here)
 
 Here I added my application to the settings.py file in the main part of the website code (what do I call this?)
 
