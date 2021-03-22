@@ -1,4 +1,4 @@
-# Django Web Application
+# Django Web Application Internship
 
 ## Overview
 
