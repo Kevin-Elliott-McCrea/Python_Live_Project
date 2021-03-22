@@ -1,8 +1,8 @@
-# Django Web Application Internship
+# Django Web Application
 
 ## Overview
 
-The end product of this project was to create a section of a mock-website that was intended to help hobbiests keep their collections of items. This was created to show the coding skills of each student in a 2 week long sprint. The technologies we used on the project were Python, Django, SQLite, Git, Azure DevOps, Bootstrap and Pycharm 2020.3.0. We used scrum as our team framework. I decided to make a app in the website called Recipe Tracker.
+The end product of this internship with Prosper IT Consulting was to create a section of a mock-website that was intended to help hobbiests keep their collections of items. This was created to show the coding skills of each student in a 2 week long sprint. The technologies we used on the project were Python, Django, SQLite, Git, Azure DevOps, Bootstrap and Pycharm 2020.3.0. We used scrum as our team framework. I decided to make a app in the website called Recipe Tracker.
 
 In this project, I had 5 stories to complete. The first one was the most difficult, where I had to initialize the project and make sure all the details were properly set up. Plus I had to add a home page and a base page (that would be the fundamental web page structure inserted to all other pages), along with a navbar and footer. In the second story, I had the job of creating a model that I could use to set up the database that saved the users' recipes. Then I also needed to make a page that could be used for creating new recipes.
 
